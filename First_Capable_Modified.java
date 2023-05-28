@@ -28,6 +28,7 @@ public class First_Capable_Modified{
 	}
 	public void sendMsg(String m) throws Exception{
 		this.dout.write((m+"\n").getBytes("UTF-8"));
+		// this.dout.write((m).getBytes("UTF-8"));
         dout.flush();
 	}
 
@@ -105,7 +106,7 @@ public class First_Capable_Modified{
 
     public void fcSchedule() throws Exception{
         while(jobIndex>=0){
-            sendMsg("GETS Capable "+ Integer.toString(core) + " " + Integer.toString(memory) + " " + Integer.toString(disk));
+            sendMsg("GETS Avail "+ Integer.toString(core) + " " + Integer.toString(memory) + " " + Integer.toString(disk));
             rcvMsg();
             fcSplitServers();
             sendMsg("SCHD " + Integer.toString(jobIndex) + " " + fcServerType);
@@ -147,21 +148,49 @@ public class First_Capable_Modified{
     public String fcSplitServers() throws NumberFormatException, IOException, Exception{	//start splitServers after the client sends GETS ALL
 		while (!msg.equals(".")){
 			String [] line = msg.split("\\s+");
-			if(line[0].equals("DATA")){ 
-				nRecs = Integer.parseInt(line[1]);		//finds out Number of records
-				recSize = Integer.parseInt(line[2]);	
-				sendMsg("OK");
-                int count = 0;
-				for(int i = 0; i < nRecs; i++){
+			if(line[0].equals("DATA")){
+                if(line[1].equals("0")){
+                    sendMsg("OK");
                     msg = rcvMsg();
-					String cores[] = msg.split("\\s+");
-                    if(count == 0){
-                        fcServerType = cores[0] + " " +cores[1];
-                        count ++;
+                    sendMsg("GETS Capable "+ Integer.toString(core) + " " + Integer.toString(memory) + " " + Integer.toString(disk));
+                    msg = rcvMsg();
+                    line = msg.split("\\s+");
+                    // rcvMsg();
+                    nRecs = Integer.parseInt(line[1]);		//finds out Number of records
+                    recSize = Integer.parseInt(line[2]);	
+                    sendMsg("OK");
+                    int count = 0;
+                    for(int i = 0; i < nRecs; i++){
+                        msg = rcvMsg();
+                        String cores[] = msg.split("\\s+");
+                        if(count == 0){
+                            fcServerType = cores[0] + " " +cores[1];
+                            count ++;
+                        }
+                        else{
+                            continue;
+                        }
                     }
-                    else{
-                        continue;
+
+                }
+                else{ 
+                    nRecs = Integer.parseInt(line[1]);		//finds out Number of records
+                    recSize = Integer.parseInt(line[2]);	
+                    sendMsg("OK");
+                    int count = 0;
+                    for(int i = 0; i < nRecs; i++){
+                        msg = rcvMsg();
+                        String cores[] = msg.split("\\s+");
+                        if(count == 0){
+                            fcServerType = cores[0] + " " +cores[1];
+                            count ++;
+                        }
+                        else{
+                            continue;
+                        }
                     }
+                }
+                
                     // int currentCore = Integer.parseInt(cores[4]);
 					// if (currentCore > lrgCore){
                     //     lrgServerType = cores[0];
@@ -173,7 +202,6 @@ public class First_Capable_Modified{
                     //         lrgCount++;
                     //     }  	   
 				    // }
-                }
 				sendMsg("OK");
 				rcvMsg();	//receives "."
 			}
@@ -183,3 +211,4 @@ public class First_Capable_Modified{
 
     
 }
+
