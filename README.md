@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Running the script
 Ensure that ds-server, ds-client, and your client are in this directory.
 Run `s2_test.py`, passing the command to run your client as a string and -n if your client uses newline-terminated messages (i.e. Java clients).
@@ -33,3 +34,18 @@ The final results are shown after the tables.
 2.1 indicates that your client has successfully scheduled all jobs in every config.
 2.2 indicates that your client has outperformed the average of at least one baseline algorithm for all metrics.
 2.3 indicates the number of configs where your client outperforms all baseline algorithms for average turnaround time (maximum of 7).
+=======
+# How to run
+### To run MyClient.java, first compile with ```javac MyClient.java``` in terminal
+#### Next run the test script against the MyClient.class
+#### Format: ./"Test Script Name" -n MyClient.class
+#### Example: ./S1Tests-wk6.sh -n MyClient.class
+#### In the above example S1Tests-wk6.sh is the name of the test script
+
+### To run MyScheduler.java, for stage 2, first compile with ```javac MyScheduler.java``` in terminal
+#### Next run the test script against the MyScheduler.class after creating it
+#### Format: ```python3 ./s2_demo.py "command to run your algorithm" [-n]```
+#### Example: ```python3 ./s2_demo.py "java MyScheduler" -n```
+
+
+>>>>>>> effe2df1c6b1b43497a6ac756b1b066ca5ee5a85
