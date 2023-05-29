@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class First_Capable_Modified{
+public class MyScheduler{
 	Socket s;
 	BufferedReader din;
 	DataOutputStream dout;
@@ -21,7 +21,7 @@ public class First_Capable_Modified{
     	int memory;
     	int disk;
 	
-	public First_Capable_Modified(String add, int port) throws Exception{
+	public MyScheduler(String add, int port) throws Exception{
 		s = new Socket(add, port);
 		din = new BufferedReader(new InputStreamReader(s.getInputStream()));
 	    	dout = new DataOutputStream(s.getOutputStream());	
@@ -29,7 +29,6 @@ public class First_Capable_Modified{
 	
 	public void sendMsg(String m) throws Exception{
 		this.dout.write((m+"\n").getBytes("UTF-8"));
-		// this.dout.write((m).getBytes("UTF-8"));
         	dout.flush();
 	}
 
@@ -39,19 +38,19 @@ public class First_Capable_Modified{
 	}
 	
 	public static void main(String[] args) throws Exception{
-		First_Capable_Modified K = new First_Capable_Modified("127.0.0.1",50000);
-		K.sendMsg("HELO");
-		System.out.println(K.rcvMsg());
-		K.sendMsg("AUTH" + " " +System.getProperty("user.name"));
-		System.out.println(K.rcvMsg());
-		K.sendMsg("REDY");
-       		K.rcvMsg();
-        	K.extractJob();
-        	K.fcSchedule();
-        	K.sendMsg("QUIT");
-        	K.rcvMsg();
-        	K.din.close();
-        	K.s.close();    
+		MyScheduler sched = new MyScheduler("127.0.0.1",50000);
+		sched.sendMsg("HELO");
+		sched.rcvMsg();
+		sched.sendMsg("AUTH" + " " +System.getProperty("user.name"));
+		sched.rcvMsg());
+		sched.sendMsg("REDY");
+       		sched.rcvMsg();
+        	sched.extractJob();
+        	sched.fcSchedule();
+        	sched.sendMsg("QUIT");
+        	sched.rcvMsg();
+        	sched.din.close();
+        	sched.s.close();    
 	}
 
     	public void terminate() throws Exception{
