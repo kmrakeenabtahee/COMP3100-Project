@@ -84,53 +84,53 @@ public class First_Capable_Modified{
 		return jobIndex;
 		}
 
-    public void fcSchedule() throws Exception{
-        while(jobIndex>=0){
-            sendMsg("GETS Avail "+ Integer.toString(core) + " " + Integer.toString(memory) + " " + Integer.toString(disk));
-            rcvMsg();
-            fcSplitServers();
-            sendMsg("SCHD " + Integer.toString(jobIndex) + " " + fcServerType);
-            rcvMsg();
-            sendMsg("REDY");
-            rcvMsg();
-            extractJob();
-        }
-    }
+	public void fcSchedule() throws Exception{
+		while(jobIndex>=0){
+		    sendMsg("GETS Avail "+ Integer.toString(core) + " " + Integer.toString(memory) + " " + Integer.toString(disk));
+		    rcvMsg();
+		    fcSplitServers();
+		    sendMsg("SCHD " + Integer.toString(jobIndex) + " " + fcServerType);
+		    rcvMsg();
+		    sendMsg("REDY");
+		    rcvMsg();
+		    extractJob();
+		}
+	    }
 
-    public String fcSplitServers() throws NumberFormatException, IOException, Exception{	
-	   while (!msg.equals(".")){
-		   String [] line = msg.split("\\s+");
-		   if(line[0].equals("DATA")){
-			   //Sends capable only if no servers are readily available
-			   if(line[1].equals("0")){ 
-                    		sendMsg("OK");
-                    		msg = rcvMsg();
-                    		sendMsg("GETS Capable "+ Integer.toString(core) + " " + Integer.toString(memory) + " " + Integer.toString(disk));
-                    		msg = rcvMsg();
-                    		line = msg.split("\\s+");
-			   }
-			   //finds out Number of records
-			   nRecs = Integer.parseInt(line[1]);
-			   recSize = Integer.parseInt(line[2]);	
-			   sendMsg("OK");
-			   //keeps count of just one server being selected
-			   int count = 0;
-			   for(int i = 0; i < nRecs; i++){
-				   msg = rcvMsg();
-				   String cores[] = msg.split("\\s+");
-				   if(count == 0){
-					   fcServerType = cores[0] + " " +cores[1]; 
-					   count ++; 
+	public String fcSplitServers() throws NumberFormatException, IOException, Exception{	
+		   while (!msg.equals(".")){
+			   String [] line = msg.split("\\s+");
+			   if(line[0].equals("DATA")){
+				   //Sends capable only if no servers are readily available
+				   if(line[1].equals("0")){ 
+		            		sendMsg("OK");
+		            		msg = rcvMsg();
+		            		sendMsg("GETS Capable "+ Integer.toString(core) + " " + Integer.toString(memory) + " " + Integer.toString(disk));
+		            		msg = rcvMsg();
+		            		line = msg.split("\\s+");
 				   }
-				   else{
-                            		continue;
+				   //finds out Number of records
+				   nRecs = Integer.parseInt(line[1]);
+				   recSize = Integer.parseInt(line[2]);	
+				   sendMsg("OK");
+				   //keeps count of just one server being selected
+				   int count = 0;
+				   for(int i = 0; i < nRecs; i++){
+					   msg = rcvMsg();
+					   String cores[] = msg.split("\\s+");
+					   if(count == 0){
+						   fcServerType = cores[0] + " " +cores[1]; 
+						   count ++; 
+					   }
+					   else{
+		                    		continue;
+					   }
 				   }
+				   sendMsg("OK");
+				   rcvMsg();	//receives "."
 			   }
-			   sendMsg("OK");
-			   rcvMsg();	//receives "."
-		   }
-	}
-	    return fcServerType;
-    }   
+		}
+		    return fcServerType;
+	    }   
 }
 
