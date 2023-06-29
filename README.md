@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Running the script
 Ensure that ds-server, ds-client, and your client are in this directory.
 Run `s2_test.py`, passing the command to run your client as a string and -n if your client uses newline-terminated messages (i.e. Java clients).
